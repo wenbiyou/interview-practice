@@ -79,7 +79,7 @@ npm run deploy
 {
   "id": 题目ID,
   "title": "题目标题",
-  "answer": "题目答案（支持HTML标签）"
+  "answer": "题目答案"
 }
 ```
 
