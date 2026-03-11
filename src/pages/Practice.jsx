@@ -325,7 +325,7 @@ function Practice() {
         <h3 className="font-bold text-gray-900 dark:text-white mb-3">
           题目导航
         </h3>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-8 sm:flex sm:flex-wrap gap-1.5 sm:gap-2">
           {questions.map((q, index) => {
             const isCompleted = completedQuestions.includes(q.id);
             const isCurrent = index === currentIndex;
@@ -337,7 +337,7 @@ function Practice() {
                   setCurrentIndex(index);
                   setShowAnswer(false);
                 }}
-                className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
+                className={`w-full sm:w-10 aspect-square sm:aspect-auto sm:h-10 rounded-lg text-sm font-medium transition-colors ${
                   isCurrent
                     ? "bg-primary-600 text-white"
                     : isCompleted
