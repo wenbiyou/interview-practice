@@ -115,13 +115,34 @@ function Review() {
               key={question.id}
               className="card p-4 hover:shadow-md transition-shadow"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
+                <div className="w-full sm:flex-1">
+                  {/* 标题行：分类标签 + 操作按钮（移动端） */}
+                  <div className="flex items-center justify-between mb-2">
                     <span className="text-xs px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded">
                       {question.categoryName}
                     </span>
+                    {/* 移动端操作按钮 */}
+                    <div className="flex items-center gap-1 sm:hidden">
+                      <button
+                        onClick={() => toggleBookmark(question.id)}
+                        className="p-1.5 text-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors"
+                        title="取消收藏"
+                      >
+                        <Bookmark className="w-4 h-4 fill-current" />
+                      </button>
+                      {activeTab === "completed" && (
+                        <button
+                          onClick={() => unmarkComplete(question.id)}
+                          className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          title="取消完成标记"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
                   </div>
+
                   <h3 className="font-medium text-gray-900 dark:text-white mb-2">
                     {question.title}
                   </h3>
@@ -138,7 +159,7 @@ function Review() {
                       : "查看答案"}
                   </button>
 
-                  {/* Answer Panel */}
+                  {/* Answer Panel - 移动端占满宽度 */}
                   {selectedQuestion?.id === question.id && (
                     <div
                       className="mt-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg question-content prose prose-blue max-w-none dark:prose-invert"
@@ -147,7 +168,8 @@ function Review() {
                   )}
                 </div>
 
-                <div className="flex items-center gap-2">
+                {/* 桌面端操作按钮 - 移动端隐藏 */}
+                <div className="hidden sm:flex items-center gap-2">
                   <button
                     onClick={() => toggleBookmark(question.id)}
                     className="p-2 text-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded-lg transition-colors"
