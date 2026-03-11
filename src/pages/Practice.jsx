@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ChevronLeft,
@@ -13,6 +13,8 @@ import {
 import { marked } from "marked";
 import { useProgressStore } from "../stores/progressStore";
 import ProgressBar from "../components/ProgressBar";
+import CountdownTimer from "../components/CountdownTimer";
+import { useCountdown, calculateReadingTime } from "../hooks/useCountdown";
 import questionsData from "../data/questions.json";
 
 marked.setOptions({
@@ -87,6 +89,31 @@ function Practice() {
     if (!currentQuestion?.answer) return "";
     return marked.parse(currentQuestion.answer);
   }, [currentQuestion?.answer]);
+
+  // 计算当前题目的阅读时间
+  const readingTime = useMemo(() => {
+    if (!currentQuestion?.answer) return 60;
+    return calculateReadingTime(currentQuestion.answer);
+  }, [currentQuestion?.answer]);
+
+  // 倒计时
+  const {
+    seconds,
+    totalSeconds,
+    progress,
+    isRunning,
+    isCompleted: isTimeUp,
+    start,
+    pause,
+    reset,
+    skip,
+    formatTime,
+  } = useCountdown(readingTime);
+
+  // 题目切换时重置计时
+  useEffect(() => {
+    reset(readingTime);
+  }, [currentIndex, readingTime, reset]);
 
   // 随机打乱
   const handleShuffle = () => {
@@ -202,6 +229,22 @@ function Practice() {
           </div>
         </div>
 
+        {/* Countdown Timer */}
+        <div className="px-4 md:px-6 pt-4">
+          <CountdownTimer
+            seconds={seconds}
+            totalSeconds={totalSeconds}
+            progress={progress}
+            isRunning={isRunning}
+            isCompleted={isTimeUp}
+            onStart={start}
+            onPause={pause}
+            onReset={reset}
+            onSkip={skip}
+            formatTime={formatTime}
+          />
+        </div>
+
         {/* Answer Section */}
         <div className="p-4 md:p-6">
           {!showAnswer ? (
@@ -269,7 +312,9 @@ function Practice() {
               }`}
             >
               <Check className={`w-5 h-5 ${isCompleted ? "stroke-[3]" : ""}`} />
-              <span className="text-sm">{isCompleted ? "已完成" : "标记完成"}</span>
+              <span className="text-sm">
+                {isCompleted ? "已完成" : "标记完成"}
+              </span>
             </button>
           </div>
         </div>
