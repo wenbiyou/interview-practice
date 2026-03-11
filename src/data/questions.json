@@ -1,0 +1,165 @@
+{
+  "categories": [
+    {
+      "id": "html-css",
+      "name": "HTML/CSS基础",
+      "icon": "🎨",
+      "tags": ["HTML", "CSS", "基础"],
+      "questions": [
+        {
+          "id": 1,
+          "title": "DOCTYPE的作用是什么？标准模式和怪异模式有什么区别？",
+          "answer": "<p><strong>DOCTYPE</strong>的主要作用是告诉浏览器以什么标准来解析和渲染页面。</p><h3>标准模式 vs 怪异模式的区别：</h3><ul><li><strong>标准模式（Standards Mode）</strong>：浏览器按照 W3C 标准来解析和渲染页面，使用标准的盒模型（content-box）</li><li><strong>怪异模式（Quirks Mode）</strong>：为了兼容早期（IE6之前）的网页，浏览器会模拟旧版浏览器的非标准行为。在这种模式下，盒模型表现为怪异盒模型</li></ul><pre><code>&lt;!-- 标准声明 --&gt;\n&lt;!DOCTYPE html&gt;</code></pre>"
+        },
+        {
+          "id": 2,
+          "title": "HTML5新增了哪些语义化标签？它们的使用场景和优势是什么？",
+          "answer": "<h3>新增的主要语义化标签：</h3><ul><li><code>&lt;header&gt;</code>：页面或章节的头部</li><li><code>&lt;nav&gt;</code>：导航链接区域</li><li><code>&lt;main&gt;</code>：页面的主要内容</li><li><code>&lt;article&gt;</code>：独立的内容块</li><li><code>&lt;section&gt;</code>：文档中的章节或区块</li><li><code>&lt;aside&gt;</code>：侧边栏内容</li><li><code>&lt;footer&gt;</code>：页面或章节的底部</li></ul><h3>优势：</h3><ol><li>SEO友好：搜索引擎能更好地理解页面结构</li><li>可访问性：屏幕阅读器能更准确地为视障用户朗读内容</li><li>代码可读性：开发者更容易理解页面结构</li></ol>"
+        },
+        {
+          "id": 3,
+          "title": "CSS选择器的优先级如何计算？",
+          "answer": "<h3>优先级权重计算规则：</h3><table><tr><th>选择器类型</th><th>权重值</th></tr><tr><td>行内样式</td><td>1,0,0,0</td></tr><tr><td>ID选择器</td><td>0,1,0,0</td></tr><tr><td>类/属性/伪类</td><td>0,0,1,0</td></tr><tr><td>元素/伪元素</td><td>0,0,0,1</td></tr></table><pre><code>#nav .menu li a { }  /* 0,1,1,2 */\n#nav .menu li.active { }  /* 0,1,2,1 */</code></pre>"
+        }
+      ]
+    },
+    {
+      "id": "javascript",
+      "name": "JavaScript基础",
+      "icon": "💛",
+      "tags": ["JavaScript", "ES6"],
+      "questions": [
+        {
+          "id": 101,
+          "title": "JavaScript的数据类型有哪些？基本类型和引用类型的区别是什么？",
+          "answer": "<h3>基本数据类型（7种）：</h3><ul><li><code>number</code>：数字</li><li><code>string</code>：字符串</li><li><code>boolean</code>：布尔值</li><li><code>undefined</code>：未定义</li><li><code>null</code>：空值</li><li><code>symbol</code>：唯一标识符（ES6）</li><li><code>bigint</code>：大整数（ES2020）</li></ul><h3>核心区别：</h3><pre><code>// 基本类型 - 值存储在栈内存\nlet a = 10;\nlet b = a;  // 复制值\nb = 20;\nconsole.log(a); // 10（原值不变）\n\n// 引用类型 - 值存储在堆内存\nlet obj1 = { name: 'Tom' };\nlet obj2 = obj1;  // 复制引用地址\nobj2.name = 'Jerry';\nconsole.log(obj1.name); // 'Jerry'（原对象被修改）</code></pre>"
+        },
+        {
+          "id": 102,
+          "title": "什么是闭包？闭包有什么用途？",
+          "answer": "<p><strong>闭包</strong>是指有权访问另一个函数作用域中变量的函数。</p><h3>用途：</h3><ol><li>数据封装（私有变量）</li><li>函数柯里化</li><li>防抖和节流</li><li>模块化模式</li></ol><pre><code>function createCounter() {\n  let count = 0;  // 私有变量\n  return {\n    increment() { return ++count; },\n    getCount() { return count; }\n  };\n}\n\nconst counter = createCounter();\ncounter.increment();\nconsole.log(counter.getCount()); // 1</code></pre>"
+        },
+        {
+          "id": 103,
+          "title": "Promise的核心作用是什么？如何解决回调地狱？",
+          "answer": "<h3>Promise的核心作用：</h3><ul><li>解决回调地狱</li><li>统一异步处理</li><li>更好的错误处理</li><li>组合异步操作</li></ul><h3>三种状态：</h3><ul><li><code>pending</code>：等待中</li><li><code>fulfilled</code>：已成功</li><li><code>rejected</code>：已失败</li></ul><pre><code>// Promise链式调用\nfetchUser(userId)\n  .then(user => getOrders(user.id))\n  .then(orders => getOrderDetails(orders[0].id))\n  .then(details => processPayment(details))\n  .catch(error => console.error(error));</code></pre>"
+        }
+      ]
+    },
+    {
+      "id": "react",
+      "name": "React框架",
+      "icon": "⚛️",
+      "tags": ["React", "Hooks"],
+      "questions": [
+        {
+          "id": 201,
+          "title": "React的核心思想是什么？虚拟DOM的原理是什么？",
+          "answer": "<h3>核心思想：</h3><ol><li>声明式UI：描述UI应该是什么样子</li><li>组件化开发：独立、可复用的组件</li><li>单向数据流：数据自顶向下流动</li></ol><h3>虚拟DOM原理：</h3><p>虚拟DOM是在内存中以JavaScript对象形式表示的DOM结构，是真实DOM的轻量级抽象。</p><pre><code>// 工作流程：\n// 1. 状态变更\n// 2. 生成新的虚拟DOM\n// 3. Diff算法对比新旧虚拟DOM\n// 4. 计算出最小变更（Patch）\n// 5. 批量更新真实DOM</code></pre><p><strong>优势：</strong>减少直接操作DOM的次数，跨平台能力，开发体验好</p>"
+        },
+        {
+          "id": 202,
+          "title": "useState和useEffect的工作原理是什么？",
+          "answer": "<h3>useState原理：</h3><p>React内部使用数组来存储Hooks状态，按调用顺序管理。</p><pre><code>const [count, setCount] = useState(0);\n\n// 函数式更新\nsetCount(prev => prev + 1);</code></pre><h3>useEffect原理：</h3><pre><code>useEffect(() => {\n  // 副作用逻辑\n  return () => {\n    // 清理函数\n  };\n}, [dependencies]);</code></pre><h3>执行时机：</h3><ul><li>空数组<code>[]</code>：只在挂载时执行</li><li>有依赖：依赖变化时执行</li><li>无依赖：每次渲染都执行</li></ul>"
+        },
+        {
+          "id": 203,
+          "title": "React中key的作用是什么？为什么不能用index作为key？",
+          "answer": "<h3>key的作用：</h3><p>帮助React识别列表中哪些元素改变了、被添加了或被删除了。</p><h3>为什么不能用index作为key：</h3><ol><li>数组顺序变化时会导致状态错乱</li><li>React会认为只是更新了文本而不是移动了元素</li><li>如果列表项有内部状态（如表单输入），会出现bug</li></ol><pre><code>// ❌ 不推荐\n{items.map((item, index) => (\n  <Item key={index} />\n))}\n\n// ✅ 推荐\n{items.map(item => (\n  <Item key={item.id} />\n))}</code></pre>"
+        }
+      ]
+    },
+    {
+      "id": "vue",
+      "name": "Vue框架",
+      "icon": "💚",
+      "tags": ["Vue", "Vue3"],
+      "questions": [
+        {
+          "id": 301,
+          "title": "Vue的响应式原理是什么？Vue2和Vue3的区别？",
+          "answer": "<h3>Vue2 - Object.defineProperty：</h3><ul><li>无法检测新增/删除属性</li><li>数组变异方法需要重写</li><li>深层对象需要递归劫持</li></ul><h3>Vue3 - Proxy：</h3><ul><li>可以检测新增/删除属性</li><li>直接支持数组索引和length</li><li>懒代理（访问时才代理）</li></ul><pre><code>// Vue3响应式API\nimport { ref, reactive } from 'vue';\n\nconst count = ref(0);\nconst state = reactive({ name: 'Tom' });</code></pre>"
+        },
+        {
+          "id": 302,
+          "title": "computed和watch的区别是什么？",
+          "answer": "<table><tr><th>特性</th><th>computed</th><th>watch</th></tr><tr><td>用途</td><td>计算派生值</td><td>监听变化执行副作用</td></tr><tr><td>返回值</td><td>有</td><td>无</td></tr><tr><td>缓存</td><td>有缓存</td><td>无缓存</td></tr><tr><td>异步</td><td>不支持</td><td>支持</td></tr></table><pre><code>// computed - 简单计算\nconst doubleCount = computed(() => count.value * 2);\n\n// watch - 异步操作\nwatch(searchQuery, async (newVal) => {\n  results.value = await searchAPI(newVal);\n});</code></pre>"
+        },
+        {
+          "id": 303,
+          "title": "Vue3的Composition API和Options API有什么区别？",
+          "answer": "<h3>核心区别：</h3><ul><li>Options API：按选项类型组织代码（data, methods, computed）</li><li>Composition API：按功能逻辑组织代码</li></ul><h3>Composition API优势：</h3><ol><li>更好的逻辑复用（Composables）</li><li>更灵活的代码组织</li><li>完整的TypeScript支持</li><li>更小的打包体积</li></ol><pre><code>// 按功能组织\nfunction useSearch() {\n  const query = ref('');\n  const results = ref([]);\n  const search = async () => { /* ... */ };\n  return { query, results, search };\n}</code></pre>"
+        }
+      ]
+    },
+    {
+      "id": "engineering",
+      "name": "前端工程化",
+      "icon": "🛠️",
+      "tags": ["Webpack", "Vite", "CI/CD"],
+      "questions": [
+        {
+          "id": 401,
+          "title": "Webpack的核心原理是什么？Loader和Plugin的区别？",
+          "answer": "<h3>核心原理：</h3><p>从Entry开始递归解析依赖，使用Loader转换模块，通过Plugin扩展功能，最终输出Bundle。</p><h3>Loader vs Plugin：</h3><table><tr><th>特性</th><th>Loader</th><th>Plugin</th></tr><tr><td>时机</td><td>模块加载时</td><td>整个构建周期</td></tr><tr><td>职责</td><td>文件转换</td><td>功能扩展</td></tr><tr><td>配置</td><td>module.rules</td><td>plugins数组</td></tr></table><pre><code>// Loader示例\n{ test: /\\.js$/, use: 'babel-loader' }\n\n// Plugin示例\nnew HtmlWebpackPlugin({ template: './index.html' })</code></pre>"
+        },
+        {
+          "id": 402,
+          "title": "Vite和Webpack的区别是什么？",
+          "answer": "<table><tr><th>特性</th><th>Webpack</th><th>Vite</th></tr><tr><td>启动速度</td><td>慢（需要打包）</td><td>快（原生ESM）</td></tr><tr><td>HMR</td><td>较慢</td><td>极快</td></tr><tr><td>生产构建</td><td>自己实现</td><td>使用Rollup</td></tr><tr><td>配置复杂度</td><td>较复杂</td><td>较简单</td></tr></table><h3>Vite优势：</h3><ul><li>开发时无需打包，直接启动</li><li>利用浏览器原生ES Modules</li><li>按需编译，冷启动快</li></ul>"
+        },
+        {
+          "id": 403,
+          "title": "前端如何实现按需加载？",
+          "answer": "<h3>1. 路由按需加载：</h3><pre><code>const Home = () => import('./views/Home.vue');\nconst About = () => import('./views/About.vue');</code></pre><h3>2. 组件按需加载：</h3><pre><code>import { defineAsyncComponent } from 'vue';\nconst AsyncComp = defineAsyncComponent(() =>\n  import('./components/Heavy.vue')\n);</code></pre><h3>3. 第三方库按需加载：</h3><pre><code>// 使用babel-plugin-component\nimport { Button } from 'element-ui';</code></pre>"
+        }
+      ]
+    },
+    {
+      "id": "performance",
+      "name": "性能优化",
+      "icon": "🚀",
+      "tags": ["性能", "缓存", "优化"],
+      "questions": [
+        {
+          "id": 501,
+          "title": "前端性能优化的核心指标有哪些？",
+          "answer": "<h3>Core Web Vitals：</h3><ul><li><strong>LCP</strong>（Largest Contentful Paint）：最大内容绘制，目标&lt;2.5s</li><li><strong>FID</strong>（First Input Delay）：首次输入延迟，目标&lt;100ms</li><li><strong>CLS</strong>（Cumulative Layout Shift）：累积布局偏移，目标&lt;0.1</li></ul><h3>其他重要指标：</h3><ul><li>FCP（First Contentful Paint）：首次内容绘制</li><li>TTFB（Time to First Byte）：首字节时间</li><li>TBT（Total Blocking Time）：总阻塞时间</li></ul>"
+        },
+        {
+          "id": 502,
+          "title": "浏览器缓存的机制是什么？",
+          "answer": "<h3>强缓存：</h3><p>不会向服务器发送请求，直接从缓存读取</p><ul><li><code>Expires</code>：过期时间（HTTP/1.0）</li><li><code>Cache-Control</code>：缓存控制（HTTP/1.1）<ul><li>max-age：缓存时间（秒）</li><li>no-cache：需要协商缓存</li><li>no-store：不缓存</li></ul></li></ul><h3>协商缓存：</h3><p>缓存过期后，向服务器确认是否可用</p><ul><li><code>Last-Modified</code> + <code>If-Modified-Since</code></li><li><code>ETag</code> + <code>If-None-Match</code></li></ul>"
+        },
+        {
+          "id": 503,
+          "title": "虚拟列表的原理是什么？",
+          "answer": "<p>虚拟列表（Virtual List）只渲染可视区域内的元素，超出视口的元素不渲染，从而大幅提升大数据列表的性能。</p><h3>核心原理：</h3><ol><li>计算可视区域能显示多少条数据</li><li>监听滚动，计算当前应该显示的数据范围</li><li>只渲染可视区域内的数据</li><li>使用padding或transform模拟完整列表的高度</li></ol><pre><code>// 使用 vue-virtual-scroller\n<RecycleScroller\n  :items="list"\n  :item-size="50"\n  key-field="id"\n>\n  <template v-slot="{ item }">\n    <div>{{ item.name }}</div>\n  </template>\n</RecycleScroller></code></pre>"
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "name": "前端安全",
+      "icon": "🔒",
+      "tags": ["安全", "XSS", "CSRF"],
+      "questions": [
+        {
+          "id": 601,
+          "title": "XSS攻击的原理和防范措施？",
+          "answer": "<h3>XSS（跨站脚本攻击）类型：</h3><ul><li><strong>存储型</strong>：恶意脚本存储在服务器</li><li><strong>反射型</strong>：恶意脚本在URL中，需要诱导点击</li><li><strong>DOM型</strong>：通过修改页面DOM结构执行</li></ul><h3>防范措施：</h3><ol><li>输入过滤和转义</li><li>使用HTTPOnly Cookie</li><li>CSP（内容安全策略）</li><li>使用框架提供的安全机制（如Vue的{{}}自动转义）</li></ol><pre><code>// 转义HTML特殊字符\nfunction escapeHtml(text) {\n  return text\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;');\n}</code></pre>"
+        },
+        {
+          "id": 602,
+          "title": "CSRF攻击的原理和防范措施？",
+          "answer": "<h3>CSRF（跨站请求伪造）原理：</h3><p>诱导用户在已认证的网站上执行非本意的操作。</p><h3>防范措施：</h3><ol><li><strong>CSRF Token</strong>：请求时携带随机Token验证</li><li><strong>SameSite Cookie</strong>：设置Cookie的SameSite属性<pre><code>Set-Cookie: session=xxx; SameSite=Strict</code></pre></li><li><strong>验证Referer</strong>：检查请求来源</li><li><strong>双重Cookie验证</strong></li></ol>"
+        },
+        {
+          "id": 603,
+          "title": "HTTPS的工作原理是什么？",
+          "answer": "<h3>HTTPS = HTTP + SSL/TLS</h3><h3>工作流程：</h3><ol><li><strong>客户端请求</strong>：发送支持的加密算法列表</li><li><strong>服务器响应</strong>：返回证书（包含公钥）</li><li><strong>证书验证</strong>：客户端验证证书合法性</li><li><strong>密钥交换</strong>：生成随机对称密钥，用公钥加密发送给服务器</li><li><strong>加密通信</strong>：使用对称密钥加密数据</li></ol><h3>优点：</h3><ul><li>数据加密传输</li><li>身份认证</li><li>数据完整性校验</li></ul>"
+        }
+      ]
+    }
+  ]
+}
