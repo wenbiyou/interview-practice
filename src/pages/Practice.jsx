@@ -1,18 +1,33 @@
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Check, Bookmark, Eye, EyeOff, Shuffle, ListOrdered } from 'lucide-react'
-import { useProgressStore } from '../stores/progressStore'
-import ProgressBar from '../components/ProgressBar'
-import questionsData from '../data/questions.json'
+import { useState, useEffect, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  Bookmark,
+  Eye,
+  EyeOff,
+  Shuffle,
+  ListOrdered,
+} from "lucide-react";
+import { marked } from "marked";
+import { useProgressStore } from "../stores/progressStore";
+import ProgressBar from "../components/ProgressBar";
+import questionsData from "../data/questions.json";
+
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+});
 
 function Practice() {
-  const { categoryId } = useParams()
-  const navigate = useNavigate()
-  const [questions, setQuestions] = useState([])
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [showAnswer, setShowAnswer] = useState(false)
-  const [isRandom, setIsRandom] = useState(false)
-  const [originalQuestions, setOriginalQuestions] = useState([])
+  const { categoryId } = useParams();
+  const navigate = useNavigate();
+  const [questions, setQuestions] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [isRandom, setIsRandom] = useState(false);
+  const [originalQuestions, setOriginalQuestions] = useState([]);
 
   const {
     completedQuestions,
@@ -22,87 +37,101 @@ function Practice() {
     unmarkComplete,
     toggleBookmark,
     updateProgress,
-  } = useProgressStore()
+  } = useProgressStore();
 
   // 加载题目
   useEffect(() => {
-    let allQuestions = []
+    let allQuestions = [];
 
     if (categoryId) {
-      const category = questionsData.categories.find(c => c.id === categoryId)
+      const category = questionsData.categories.find(
+        (c) => c.id === categoryId,
+      );
       if (category) {
-        allQuestions = category.questions.map(q => ({ ...q, categoryName: category.name }))
+        allQuestions = category.questions.map((q) => ({
+          ...q,
+          categoryName: category.name,
+        }));
       }
     } else {
-      allQuestions = questionsData.categories.flatMap(cat =>
-        cat.questions.map(q => ({ ...q, categoryName: cat.name }))
-      )
+      allQuestions = questionsData.categories.flatMap((cat) =>
+        cat.questions.map((q) => ({ ...q, categoryName: cat.name })),
+      );
     }
 
-    setOriginalQuestions(allQuestions)
-    setQuestions(allQuestions)
+    setOriginalQuestions(allQuestions);
+    setQuestions(allQuestions);
 
     // 恢复进度
     if (categoryId && currentProgress[categoryId]) {
-      setCurrentIndex(Math.min(currentProgress[categoryId], allQuestions.length - 1))
+      setCurrentIndex(
+        Math.min(currentProgress[categoryId], allQuestions.length - 1),
+      );
     }
-  }, [categoryId, currentProgress])
+  }, [categoryId, currentProgress]);
 
   // 保存进度
   useEffect(() => {
     if (categoryId) {
-      updateProgress(categoryId, currentIndex)
+      updateProgress(categoryId, currentIndex);
     }
-  }, [currentIndex, categoryId, updateProgress])
+  }, [currentIndex, categoryId, updateProgress]);
 
-  const currentQuestion = questions[currentIndex]
-  const isCompleted = currentQuestion && completedQuestions.includes(currentQuestion.id)
-  const isBookmarked = currentQuestion && bookmarkedQuestions.includes(currentQuestion.id)
+  const currentQuestion = questions[currentIndex];
+  const isCompleted =
+    currentQuestion && completedQuestions.includes(currentQuestion.id);
+  const isBookmarked =
+    currentQuestion && bookmarkedQuestions.includes(currentQuestion.id);
+
+  const renderedAnswer = useMemo(() => {
+    if (!currentQuestion?.answer) return "";
+    return marked.parse(currentQuestion.answer);
+  }, [currentQuestion?.answer]);
 
   // 随机打乱
   const handleShuffle = () => {
     if (isRandom) {
-      setQuestions([...originalQuestions])
+      setQuestions([...originalQuestions]);
     } else {
-      const shuffled = [...questions].sort(() => Math.random() - 0.5)
-      setQuestions(shuffled)
+      const shuffled = [...questions].sort(() => Math.random() - 0.5);
+      setQuestions(shuffled);
     }
-    setIsRandom(!isRandom)
-    setCurrentIndex(0)
-    setShowAnswer(false)
-  }
+    setIsRandom(!isRandom);
+    setCurrentIndex(0);
+    setShowAnswer(false);
+  };
 
   // 上一题
   const handlePrev = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1)
-      setShowAnswer(false)
+      setCurrentIndex(currentIndex - 1);
+      setShowAnswer(false);
     }
-  }
+  };
 
   // 下一题
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1)
-      setShowAnswer(false)
+      setCurrentIndex(currentIndex + 1);
+      setShowAnswer(false);
     }
-  }
+  };
 
   // 切换完成状态
   const handleToggleComplete = () => {
     if (isCompleted) {
-      unmarkComplete(currentQuestion.id)
+      unmarkComplete(currentQuestion.id);
     } else {
-      markComplete(currentQuestion.id)
+      markComplete(currentQuestion.id);
     }
-  }
+  };
 
   if (!currentQuestion) {
     return (
       <div className="text-center py-20">
         <p className="text-gray-500">暂无题目</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -110,7 +139,7 @@ function Practice() {
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           className="flex items-center gap-1 text-gray-600 hover:text-primary-600"
         >
           <ChevronLeft className="w-5 h-5" />
@@ -122,12 +151,16 @@ function Practice() {
             onClick={handleShuffle}
             className={`p-2 rounded-lg transition-colors ${
               isRandom
-                ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30'
-                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300'
+                ? "bg-primary-100 text-primary-700 dark:bg-primary-900/30"
+                : "text-gray-600 hover:bg-gray-100 dark:text-gray-300"
             }`}
-            title={isRandom ? '恢复顺序' : '随机打乱'}
+            title={isRandom ? "恢复顺序" : "随机打乱"}
           >
-            {isRandom ? <ListOrdered className="w-5 h-5" /> : <Shuffle className="w-5 h-5" />}
+            {isRandom ? (
+              <ListOrdered className="w-5 h-5" />
+            ) : (
+              <Shuffle className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>
@@ -157,11 +190,13 @@ function Practice() {
                 onClick={() => toggleBookmark(currentQuestion.id)}
                 className={`p-2 rounded-lg transition-colors ${
                   isBookmarked
-                    ? 'text-yellow-500 bg-yellow-100 dark:bg-yellow-900/30'
-                    : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-100'
+                    ? "text-yellow-500 bg-yellow-100 dark:bg-yellow-900/30"
+                    : "text-gray-400 hover:text-yellow-500 hover:bg-gray-100"
                 }`}
               >
-                <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-current' : ''}`} />
+                <Bookmark
+                  className={`w-5 h-5 ${isBookmarked ? "fill-current" : ""}`}
+                />
               </button>
             </div>
           </div>
@@ -193,7 +228,7 @@ function Practice() {
               </div>
               <div
                 className="question-content prose prose-blue max-w-none dark:prose-invert"
-                dangerouslySetInnerHTML={{ __html: currentQuestion.answer }}
+                dangerouslySetInnerHTML={{ __html: renderedAnswer }}
               />
             </div>
           )}
@@ -215,12 +250,12 @@ function Practice() {
               onClick={handleToggleComplete}
               className={`flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${
                 isCompleted
-                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200'
+                  ? "bg-green-100 text-green-700 dark:bg-green-900/30"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
               }`}
             >
-              <Check className={`w-5 h-5 ${isCompleted ? 'stroke-[3]' : ''}`} />
-              {isCompleted ? '已完成' : '标记完成'}
+              <Check className={`w-5 h-5 ${isCompleted ? "stroke-[3]" : ""}`} />
+              {isCompleted ? "已完成" : "标记完成"}
             </button>
 
             <button
@@ -237,35 +272,37 @@ function Practice() {
 
       {/* Question List */}
       <div className="card p-4">
-        <h3 className="font-bold text-gray-900 dark:text-white mb-3">题目导航</h3>
+        <h3 className="font-bold text-gray-900 dark:text-white mb-3">
+          题目导航
+        </h3>
         <div className="flex flex-wrap gap-2">
           {questions.map((q, index) => {
-            const isCompleted = completedQuestions.includes(q.id)
-            const isCurrent = index === currentIndex
+            const isCompleted = completedQuestions.includes(q.id);
+            const isCurrent = index === currentIndex;
 
             return (
               <button
                 key={q.id}
                 onClick={() => {
-                  setCurrentIndex(index)
-                  setShowAnswer(false)
+                  setCurrentIndex(index);
+                  setShowAnswer(false);
                 }}
                 className={`w-10 h-10 rounded-lg text-sm font-medium transition-colors ${
                   isCurrent
-                    ? 'bg-primary-600 text-white'
+                    ? "bg-primary-600 text-white"
                     : isCompleted
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'
+                      ? "bg-green-100 text-green-700 dark:bg-green-900/30"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300"
                 }`}
               >
                 {index + 1}
               </button>
-            )
+            );
           })}
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Practice
+export default Practice;
