@@ -236,35 +236,40 @@ function Practice() {
 
         {/* Actions */}
         <div className="p-4 md:p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={handlePrev}
-              disabled={currentIndex === 0}
-              className="flex items-center gap-1 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            >
-              <ChevronLeft className="w-5 h-5" />
-              上一题
-            </button>
+          {/* 移动端：垂直排列 | 桌面端：水平排列 */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            {/* 导航按钮组 */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handlePrev}
+                disabled={currentIndex === 0}
+                className="flex-1 sm:flex-initial flex items-center justify-center gap-1 px-4 py-3 sm:py-2 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors min-w-[100px]"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                <span className="text-sm">上一题</span>
+              </button>
 
+              <button
+                onClick={handleNext}
+                disabled={currentIndex === questions.length - 1}
+                className="flex-1 sm:flex-initial flex items-center justify-center gap-1 px-4 py-3 sm:py-2 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors min-w-[100px]"
+              >
+                <span className="text-sm">下一题</span>
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* 完成按钮 - 使用主色调区分 */}
             <button
               onClick={handleToggleComplete}
-              className={`flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition-colors ${
+              className={`w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 sm:py-2 rounded-lg font-medium transition-colors ${
                 isCompleted
-                  ? "bg-green-100 text-green-700 dark:bg-green-900/30"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
+                  ? "bg-green-500 text-white hover:bg-green-600"
+                  : "bg-primary-600 text-white hover:bg-primary-700"
               }`}
             >
               <Check className={`w-5 h-5 ${isCompleted ? "stroke-[3]" : ""}`} />
-              {isCompleted ? "已完成" : "标记完成"}
-            </button>
-
-            <button
-              onClick={handleNext}
-              disabled={currentIndex === questions.length - 1}
-              className="flex items-center gap-1 px-4 py-2 rounded-lg text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            >
-              下一题
-              <ChevronRight className="w-5 h-5" />
+              <span className="text-sm">{isCompleted ? "已完成" : "标记完成"}</span>
             </button>
           </div>
         </div>
